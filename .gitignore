@@ -1,0 +1,33 @@
+# python
+*.pyc
+**/__pycache__/
+.pytest_cache/*
+.pydevproject
+
+# IDE
+.vscode/*
+
+# Pip
+*.egg-info
+
+# files
+*.log
+*.pkl
+*.jpg
+*.pcd
+*.pth
+*.csv
+
+training_log/*
+testing_log/*
+*features*/*
+prediction_features/*
+*dataset/*
+experiments/
+*model/
+checkpoints/
+training_log/
+testing_log/
+./trash
+.DS_Store
+.ipynb_checkpoints
