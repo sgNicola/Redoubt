@@ -1,0 +1,5 @@
+inference_gameformer_planner:
+  _target_: Planner.inference_gameformer_planner.Planner
+  _convert_: "all"
+  model_path:
+  device: 'cpu'

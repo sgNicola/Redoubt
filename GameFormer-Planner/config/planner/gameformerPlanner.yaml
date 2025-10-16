@@ -1,0 +1,5 @@
+planner:
+  _target_: Planner.planner.Planner
+  _convert_: "all"
+  model_path:
+  device: 'cpu'

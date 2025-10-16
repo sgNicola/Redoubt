@@ -1,0 +1,92 @@
+_target_: nuplan.planning.scenario_builder.scenario_filter.ScenarioFilter
+_convert_: 'all'
+
+scenario_types:
+  - stationary
+  - on_intersection
+  - near_pedestrian_on_crosswalk
+  - on_pickup_dropoff
+  - traversing_intersection
+  - on_traffic_light_intersection
+  - medium_magnitude_speed
+  - traversing_traffic_light_intersection
+  - high_magnitude_speed
+  - traversing_pickup_dropoff
+  - stationary_in_traffic
+  - on_stopline_traffic_light
+  - near_pedestrian_at_pickup_dropoff
+  - stationary_at_traffic_light_without_lead
+  - traversing_crosswalk
+  - near_long_vehicle
+  - low_magnitude_speed
+  - on_stopline_stop_sign
+  - following_lane_without_lead
+  - stationary_at_traffic_light_with_lead
+  - on_stopline_crosswalk
+  - near_trafficcone_on_driveable
+  - on_all_way_stop_intersection
+  - near_multiple_vehicles
+  - near_high_speed_vehicle
+  - on_carpark
+  - near_barrier_on_driveable
+  - near_construction_zone_sign
+  - following_lane_with_slow_lead
+  - high_lateral_acceleration
+  - behind_long_vehicle
+  - stopping_at_crosswalk
+  - stopping_at_stop_sign_without_lead
+  - starting_protected_noncross_turn
+  - starting_unprotected_cross_turn
+  - near_pedestrian_on_crosswalk_with_ego
+  - near_multiple_pedestrians
+  - accelerating_at_traffic_light
+  - stopping_with_lead
+  - accelerating_at_traffic_light_without_lead
+  - starting_left_turn
+  - starting_protected_cross_turn
+  - starting_straight_traffic_light_intersection_traversal
+  - starting_unprotected_noncross_turn
+  - starting_straight_stop_sign_intersection_traversal
+  - following_lane_with_lead
+  - starting_right_turn
+  - accelerating_at_stop_sign
+  - waiting_for_pedestrian_to_cross
+  - stopping_at_stop_sign_no_crosswalk
+  - starting_high_speed_turn
+  - behind_bike
+  - starting_low_speed_turn
+  - stopping_at_traffic_light_without_lead
+  - accelerating_at_crosswalk
+  - stationary_at_crosswalk
+  - accelerating_at_stop_sign_no_crosswalk
+  - accelerating_at_traffic_light_with_lead
+  - changing_lane
+  - behind_pedestrian_on_driveable
+  - stopping_at_stop_sign_with_lead
+  - stopping_at_traffic_light_with_lead
+  - behind_pedestrian_on_pickup_dropoff
+  - changing_lane_to_left
+  - changing_lane_to_right
+  - high_magnitude_jerk
+  - crossed_by_vehicle
+  - traversing_narrow_lane
+  - starting_u_turn
+  - near_multiple_bikes
+  - changing_lane_with_trail
+  
+scenario_tokens: null               # List of scenario tokens to include
+
+log_names: null                     # Filter scenarios by log names
+map_names: null                     # Filter scenarios by map names
+
+num_scenarios_per_type: null        # Number of scenarios per type
+limit_total_scenarios: 34         # Limit total scenarios (float = fraction, int = num) - this filter can be applied on top of num_scenarios_per_type
+timestamp_threshold_s: null         # Filter scenarios to ensure scenarios have more than `timestamp_threshold_s` seconds between their initial lidar timestamps
+ego_displacement_minimum_m: null    # Whether to remove scenarios where the ego moves less than a certain amount
+ego_start_speed_threshold: null     # Limit to scenarios where the ego reaches a certain speed from below
+ego_stop_speed_threshold: null      # Limit to scenarios where the ego reaches a certain speed from above
+speed_noise_tolerance: null         # Value at or below which a speed change between two timepoints should be ignored as noise.
+
+expand_scenarios: false              # Whether to expand multi-sample scenarios to multiple single-sample scenarios
+remove_invalid_goals: true          # Whether to remove scenarios where the mission goal is invalid
+shuffle: false        
