@@ -1,9 +1,0 @@
-
-Creating experiment directory for train: /home/sgwang/Redoubt/experiments/train/001_enc_dec/2025_10_08__15_58_14
-
-Creating experiment directory for train: /home/sgwang/Redoubt/experiments/train/001_enc_dec/2025_10_08__15_58_14
-
-Creating experiment directory for train: /home/sgwang/Redoubt/experiments/train/001_enc_dec/2025_10_08__15_58_14
-Initializing new model
-Initializing new model
-Initializing new model
