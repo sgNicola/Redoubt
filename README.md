@@ -1,9 +1,7 @@
 # REDOUBT
 This repository contains the code for  
 **REDOUBT: Duo Safety Validation for Autonomous Vehicle Motion Planning**
-<br> [City University of Hong Kong]
 
-# Readme file coming soon
 ## Overview
 
 ## Getting started
@@ -55,6 +53,7 @@ The code is under cleaning and will be released gradually.
 ## Acknowledgements
 Many thanks to the open-source community, also checkout these works:
 [planTF](https://github.com/jchengai/planTF)
+
 [GameFormer-Planner](https://github.com/MCZhi/GameFormer-Planner)
 [Pluto](https://github.com/jchengai/pluto)
 [PlanScope](https://github.com/Rex-sys-hk/PlanScope)
@@ -65,12 +64,5 @@ If you have any questions or suggestions, please feel free to open an issue or c
 ## Citation
 If you find this repository useful for your research, please consider giving us a star; and citing our paper.
 ``` 
-@inproceedings{
-anonymous2025redoubt,
-title={{REDOUBT}: Duo Safety Validation for Autonomous Vehicle Motion Planning},
-author={Anonymous},
-booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
-year={2025},
-url={https://openreview.net/forum?id=lEsvczuPVj}
-}
+
 ```

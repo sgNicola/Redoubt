@@ -29,22 +29,6 @@ scenario_types:
   - following_lane_with_lead
   - stopping_at_traffic_light_without_lead 
   - waiting_for_pedestrian_to_cross
-  # - stopping_at_stop_sign_without_lead
-  # - starting_unprotected_cross_turn
-  # - on_stopline_stop_sign
-  # - on_stopline_traffic_light
-  # - on_carpark
-  #  - on_stopline_crosswalk
-  # - high_lateral_acceleration
-  # - stopping_at_crosswalk
-  # - on_traffic_light_intersection
-  # - on_pickup_dropoff
-  # - traversing_pickup_dropoff
-  # - on_intersection
-  # - traversing_crosswalk
-  # - near_barrier_on_driveable
-  # - near_trafficcone_on_driveable
-  # - near_multiple_vehicles
 
 scenario_tokens: null               # List of scenario tokens to include
 
