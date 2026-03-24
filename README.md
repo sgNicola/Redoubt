@@ -1,68 +1,139 @@
 # REDOUBT
-This repository contains the code for  
-**REDOUBT: Duo Safety Validation for Autonomous Vehicle Motion Planning**
+
+This repository contains the code for **REDOUBT: Duo Safety Validation for Autonomous Vehicle Motion Planning**.
 
 ## Overview
 
-## Getting started
-### 1. Installation
-To begin, please follow these steps:
-- Download the [nuPlan dataset](https://www.nuscenes.org/nuplan#download) and set it up as described [here](https://nuplan-devkit.readthedocs.io/en/latest/dataset_setup.html). 
-- Install the nuPlan devkit [here](https://nuplan-devkit.readthedocs.io/en/latest/installation.html) (version tested: v1.2.2). 
-- Clone this repository and navigate into the folder:
-```
-git clone  && cd  
-```
-- Activate the environment created when installing the nuPlan-devkit:
-```
+`REDOUBT` builds on the nuPlan ecosystem and integrates multiple planners and evaluation pipelines for autonomous driving research.
+
+Current repository highlights:
+- Scope/Pluto-style training and simulation entry points in the project root.
+- `GameFormer-Planner` integration for data processing, caching, and planner experiments.
+- nuPlan-based closed-loop/open-loop simulation scripts.
+
+## Repository Structure
+
+- `src/`: core training modules, models, and custom training logic.
+- `config/`: hydra configs for training/simulation in the root pipeline.
+- `GameFormer-Planner/`: GameFormer-related processing, training, simulation, and configs.
+- `run_training.py`: main training entry.
+- `run_simulation.py`: main simulation entry.
+- `train_scope.sh`, `sim_scope.sh`: convenient scripts for common experiments.
+
+## Getting Started
+
+### 1) Prerequisites
+
+- Python/Conda environment compatible with nuPlan devkit.
+- nuPlan devkit installed (tested with `v1.2.2`):  
+  [nuPlan installation guide](https://nuplan-devkit.readthedocs.io/en/latest/installation.html)
+- nuPlan dataset downloaded and prepared:  
+  [nuPlan dataset setup](https://nuplan-devkit.readthedocs.io/en/latest/dataset_setup.html)
+
+### 2) Installation
+
+```bash
+git clone https://github.com/sgNicola/Redoubt.git
+cd Redoubt
 conda activate nuplan
-```
-- Install the required packages:
-```
 pip install -r requirements.txt
 ```
-- Add the following environment variable to your `~/.bashrc` (you can customize it):
-```
+
+If your root workflow needs additional packages beyond the nuPlan environment, install them as needed.
+
+### 3) Environment Variables
+
+Set environment variables in your shell config (`~/.bashrc` as an example):
+
+```bash
+export NUPLAN_DATA_ROOT="/path/to/nuplan/dataset"
+export NUPLAN_MAPS_ROOT="/path/to/nuplan/dataset/maps"
 export NUPLAN_EXP_ROOT="$HOME/nuplan/exp"
+export PYTHONPATH="$PYTHONPATH:/path/to/Redoubt"
 ```
 
-### 2. Data process
-Before training the GameFormer model, you need to preprocess the raw data using:
+Then reload:
+
+```bash
+source ~/.bashrc
 ```
+
+## Data Processing
+
+### Root pipeline preprocessing
+
+Use the `GameFormer-Planner` preprocessing script:
+
+```bash
+cd GameFormer-Planner
 python data_process.py \
---data_path nuplan/dataset/nuplan-v1.1/splits/mini \
---map_path nuplan/dataset/maps \
---save_path nuplan/processed_data
+  --data_path "$NUPLAN_DATA_ROOT/nuplan-v1.1/splits/mini" \
+  --map_path "$NUPLAN_MAPS_ROOT" \
+  --save_path "$NUPLAN_EXP_ROOT/processed_data"
 ```
-Three arguments are necessary: ```--data_path``` to specify the path to the stored nuPlan dataset, ```--map_path``` to specify the path to the nuPlan map data, and ```--save_path``` to specify the path to save the processed data. 
 
-Optional arguments like ```--scenarios_per_type``` and ```--total_scenarios``` can also be used to specify the amount of data to process.
+Required arguments:
+- `--data_path`: nuPlan scenario database path.
+- `--map_path`: nuPlan maps path.
+- `--save_path`: output directory for processed data.
 
-### 3. Training
+Optional controls such as `--scenarios_per_type` and `--total_scenarios` can be used to limit processing size.
+
+### GameFormer cache example
+
+```bash
+cd GameFormer-Planner
+sh test_cache.sh
+```
+
+`test_cache.sh` calls `cache_process.py` with `config/scenario_filter/train_InD.yaml` and writes logs to `cache.log`.
+
+## Training
+
+### Train Scope (root pipeline)
+
+```bash
+cd /path/to/Redoubt
 sh train_scope.sh
-### 4. Simulation
-**Make sure the model parameters in ```planner.py``` in ```_initialize_model``` match those used in training.**
+```
 
-###  To Do
-The code is under cleaning and will be released gradually.
--[] improve docs
--[] training code
--[] feature builder 
--[] initial repo & paper
+This script includes a short sanity run and a full training section. Please update GPU IDs and workspace paths in the script before launching.
+
+## Simulation
+
+### Run Scope simulation
+
+```bash
+cd /path/to/Redoubt
+sh sim_scope.sh
+```
+
+Before simulation:
+- Put checkpoints under `checkpoints/` (or update `CKPT_ROOT` in script).
+- Ensure planner model settings used in simulation match those used during training.
+- Choose proper scenario builder/filter in the script (`nuplan_mini`, `mini_demo_scenario`, etc.).
+
+## To Do
+
+- [ ] Improve documentation.
+- [ ] Release more complete training recipes.
+- [ ] Release feature builder details.
+- [ ] Finalize paper and reproducibility package.
 
 ## Acknowledgements
-Many thanks to the open-source community, also checkout these works:
-[planTF](https://github.com/jchengai/planTF)
 
-[GameFormer-Planner](https://github.com/MCZhi/GameFormer-Planner)
-[Pluto](https://github.com/jchengai/pluto)
-[PlanScope](https://github.com/Rex-sys-hk/PlanScope)
+Many thanks to the open-source community. Related projects:
+- [planTF](https://github.com/jchengai/planTF)
+- [GameFormer-Planner](https://github.com/MCZhi/GameFormer-Planner)
+- [Pluto](https://github.com/jchengai/pluto)
+- [PlanScope](https://github.com/Rex-sys-hk/PlanScope)
+
 ## Contact
-If you have any questions or suggestions, please feel free to open an issue or contact us (shuguangwang6@gmail.com).
 
+If you have any questions or suggestions, please open an issue or contact:
+- shuguangwang6@gmail.com
 
 ## Citation
-If you find this repository useful for your research, please consider giving us a star; and citing our paper.
-``` 
 
-```
+If this repository is useful for your research, please consider giving it a star.
+The citation entry will be updated after publication details are finalized.
