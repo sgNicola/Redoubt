@@ -3,6 +3,7 @@ export PLANTF="$(pwd)/plantf_dataset"
 export CUDA_VISIBLE_DEVICES=2,3,5,7
 cwd=$(pwd)
 CKPT_ROOT="$cwd/checkpoints"
+# please make sure to change the cache path to your own path
 echo "====Start training====" &&
 
 python run_plantf_latent.py \

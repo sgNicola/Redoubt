@@ -2,6 +2,7 @@
 import warnings
 from typing import List, Type
 
+import numpy as np
 import shapely
 import torch
 from nuplan.common.actor_state.ego_state import EgoState

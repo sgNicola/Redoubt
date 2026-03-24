@@ -63,22 +63,6 @@ source ~/.bashrc
 ### Root pipeline preprocessing
 
 Use the `GameFormer-Planner` preprocessing script:
-
-```bash
-cd GameFormer-Planner
-python data_process.py \
-  --data_path "$NUPLAN_DATA_ROOT/nuplan-v1.1/splits/mini" \
-  --map_path "$NUPLAN_MAPS_ROOT" \
-  --save_path "$NUPLAN_EXP_ROOT/processed_data"
-```
-
-Required arguments:
-- `--data_path`: nuPlan scenario database path.
-- `--map_path`: nuPlan maps path.
-- `--save_path`: output directory for processed data.
-
-Optional controls such as `--scenarios_per_type` and `--total_scenarios` can be used to limit processing size.
-
 ### GameFormer cache example
 
 ```bash
@@ -88,37 +72,80 @@ sh test_cache.sh
 
 `test_cache.sh` calls `cache_process.py` with `config/scenario_filter/train_InD.yaml` and writes logs to `cache.log`.
 
-## Training
-
-### Train Scope (root pipeline)
-
+### Pluto cache example
+1. cache the training data
 ```bash
-cd /path/to/Redoubt
-sh train_scope.sh
+script/cache_train_pluto.sh
+```
+2. cache the val data and put the val data under the training dataset
+```bash
+sh script/cache_val_pluto.sh
+cd $NUPLAN_EXP_ROOT/pluto_val
+mv $NUPLAN_EXP_ROOT/pluto_val/* $NUPLAN_EXP_ROOT/pluto_train
+```
+
+## Training
+1. make checkpoints files for saving the trained planner checkpoints.
+2. train planners:
+```bash
+sh script/train_pluto.sh
+```
+3. rename the best saved planner checkpoints and move to your checkpoints files
+```bash
+mkdir checkpoints
+```
+4. make folder for saving the pluto_dataset (latent features)
+```bash
+mkdir pluto_dataset
+```
+
+5. run inference scripts to get the latent features
+```bash
+#   +stage='train' 
+sh script/inference_train_pluto.sh
+```
+change the stage in script to 'val'
+```bash
+#   +stage='val' 
+sh script/inference_train_pluto.sh
 ```
 
 This script includes a short sanity run and a full training section. Please update GPU IDs and workspace paths in the script before launching.
 
 ## Simulation
 
-### Run Scope simulation
+### Run pluto/scope/plantf simulation
 
+example:
 ```bash
-cd /path/to/Redoubt
-sh sim_scope.sh
+bash script/inference_sim_pluto.sh
 ```
+Folder where all simulation results are stored: $NUPLAN_EXP_ROOT/exp/exp/simulation/open_loop_boxes/scenario_group_0/inference_pluto_planner
+ 
+
+Then we can see that in pluto_datase, we get three folders: simulation_results, train_results, val_results.
 
 Before simulation:
 - Put checkpoints under `checkpoints/` (or update `CKPT_ROOT` in script).
 - Ensure planner model settings used in simulation match those used during training.
-- Choose proper scenario builder/filter in the script (`nuplan_mini`, `mini_demo_scenario`, etc.).
+- 
+then we can see in the pluto_dataset. it contains 
 
+## Train flow matching model on the latent features
+change the path in train_cflow.sh
+--data_dir /path/to/Redoubt/pluto_dataset --model_name pluto
+'''
+sh train_cflow.sh
+'''
+## Inference flow matching
+change the data_dir and checkpoint path in script/flow_inference.sh
+```bash
+sh script/flow_inference.sh
+```
 ## To Do
 
 - [ ] Improve documentation.
-- [ ] Release more complete training recipes.
-- [ ] Release feature builder details.
-- [ ] Finalize paper and reproducibility package.
+
 
 ## Acknowledgements
 

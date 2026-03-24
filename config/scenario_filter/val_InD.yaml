@@ -29,22 +29,6 @@ scenario_types:
   - following_lane_with_lead
   - stopping_at_traffic_light_without_lead 
   - waiting_for_pedestrian_to_cross
-  # - stopping_at_stop_sign_without_lead
-  # - starting_unprotected_cross_turn
-  # - on_stopline_stop_sign
-  # - on_stopline_traffic_light
-  # - on_carpark
-  #  - on_stopline_crosswalk
-  # - high_lateral_acceleration
-  # - stopping_at_crosswalk
-  # - on_traffic_light_intersection
-  # - on_pickup_dropoff
-  # - traversing_pickup_dropoff
-  # - on_intersection
-  # - traversing_crosswalk
-  # - near_barrier_on_driveable
-  # - near_trafficcone_on_driveable
-  # - near_multiple_vehicles
 
 scenario_tokens: null               # List of scenario tokens to include
 
@@ -53,7 +37,8 @@ map_names: null                     # Filter scenarios by map names
 
 num_scenarios_per_type: null        # Number of scenarios per type
 # limit_total_scenarios: 34000         # Limit total scenarios (float = fraction, int = num) - this filter can be applied on top of num_scenarios_per_type
-limit_total_scenarios: 60000
+# limit_total_scenarios: 60000
+limit_total_scenarios: 600
 timestamp_threshold_s: null         # Filter scenarios to ensure scenarios have more than `timestamp_threshold_s` seconds between their initial lidar timestamps
 ego_displacement_minimum_m: null    # Whether to remove scenarios where the ego moves less than a certain amount
 ego_start_speed_threshold: null     # Limit to scenarios where the ego reaches a certain speed from below

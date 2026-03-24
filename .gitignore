@@ -24,10 +24,12 @@ testing_log/*
 prediction_features/*
 *dataset/*
 experiments/
-*model/
+# model/
 checkpoints/
 training_log/
 testing_log/
 ./trash
 .DS_Store
 .ipynb_checkpoints
+pluto_dataset/
+*.ckpt

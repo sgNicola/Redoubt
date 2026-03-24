@@ -8,6 +8,7 @@ pluto_planner:
   candidate_subsample_ratio: 1.0
   candidate_min_num: 10
   learning_based_score_weight: 0.3
+  rule_based_evaluator: false
 
   planner:
     _target_: src.models.pluto.pluto_model.PlanningModel
@@ -24,7 +25,7 @@ pluto_planner:
     drop_path: 0.2
     dropout: 0.1
     num_heads: 4
-    num_modes: 12
+    num_modes: 6
     state_dropout: 0.75
     use_ego_history: false
     state_attn_encoder: true

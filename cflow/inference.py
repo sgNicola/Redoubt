@@ -14,12 +14,13 @@ from pathlib import Path
 from torch.distributions import Independent, Normal
 from torch.distributions import MixtureSameFamily, Categorical, Normal
 from src.exp.experiment import setup_logger
-# from cflow.flow_trainer import FlowMatchingLightningModule
-from cflow.ablition_trainer import FlowMatchingLightningModule
+from cflow.flow_trainer import FlowMatchingLightningModule
 from ade.ade_trainer import LitSparseRegression
 warnings.filterwarnings("ignore", category=UserWarning, module='torch')
 import numpy as np  
 import pandas as pd
+import argparse
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "0,7"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -61,10 +62,9 @@ def flow_sample(
 
     # Wrap the flow model to use it in the solver
     wrapped_vf = WrappedModel(flow_model)
-    # solver = ODESolver(velocity_model=wrapped_vf)
-    gaussian_log_density = Independent(
-        Normal(torch.zeros(128, device=device), torch.ones(128, device=device)), 1
-    ).log_prob
+    # gaussian_log_density = Independent(
+    #     Normal(torch.zeros(128, device=device), torch.ones(128, device=device)), 1
+    # ).log_prob
     solver = ODESolver(velocity_model=wrapped_vf)   
     k = 5
     latent_dim = 128
@@ -112,11 +112,13 @@ def run(data_dir, flow_checkpoint_path):
     )
     
     df=flow_sample(flow_checkpoint_path, test_dataloader, step_size)
-    save_path = f"{save_dir}/op_nopro_density.parquet"
+    save_path = f"{save_dir}/log_density.parquet"
     df.to_parquet(save_path, index=False)
     print("save successfully")
     
 if __name__ == "__main__":
-    data_dir = "/home/sgwang/PlanScope/pluto_dataset"
-    flow_checkpoint_path = '/home/sgwang/PlanScope/FM_model/pluto_flow_nopro-epoch=1659-val_loss=0.3321.ckpt'
-    run(data_dir,  flow_checkpoint_path)
+    parser=argparse.ArgumentParser(description="Train a model with specified options.")
+    parser.add_argument("--flow_checkpoint_path", type=str, default=None, help="Path to the checkpoint")
+    parser.add_argument("--data_dir", type=str, required=True, help="Path to the dataset directory.")
+    args = parser.parse_args()
+    run(args.data_dir, args.flow_checkpoint_path)
