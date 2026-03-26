@@ -1,4 +1,4 @@
 export PYTHONPATH=$PYTHONPATH:$(pwd)
 export CUDA_VISIBLE_DEVICES=2,3,5,7
 
-python ade/train_ade.py --data_dir /home/sgwang/PlanScope/planscope_dataset --model_name planscope
+python ade/train_ade.py --data_dir pluto_dataset --model_name pluto

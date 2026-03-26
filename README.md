@@ -1,49 +1,72 @@
-# REDOUBT
+以下是为您整理好的 Markdown 源码。您可以直接将其复制并保存为 `README.md` 文件：
 
-This repository contains the code for **REDOUBT: Duo Safety Validation for Autonomous Vehicle Motion Planning**.
+````markdown
+# REDOUBT: Duo Safety Validation for Autonomous Vehicle Motion Planning
 
-## Overview
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Conference](https://img.shields.io/badge/NeurIPS-2025-blue.svg)](https://openreview.net/forum?id=lEsvczuPVj)
 
-`REDOUBT` builds on the nuPlan ecosystem and integrates multiple planners and evaluation pipelines for autonomous driving research.
+REDOUBT builds upon the **nuPlan** ecosystem, integrating multiple planners and evaluation pipelines to enhance safety validation for autonomous vehicle motion planning.
 
-Current repository highlights:
-- Scope/Pluto-style training and simulation entry points in the project root.
-- `GameFormer-Planner` integration for data processing, caching, and planner experiments.
-- nuPlan-based closed-loop/open-loop simulation scripts.
+---
 
-## Repository Structure
+## 📂 Repository Structure
 
-- `src/`: core training modules, models, and custom training logic.
-- `config/`: hydra configs for training/simulation in the root pipeline.
-- `GameFormer-Planner/`: GameFormer-related processing, training, simulation, and configs.
-- `run_training.py`: main training entry.
-- `run_simulation.py`: main simulation entry.
-- `train_scope.sh`, `sim_scope.sh`: convenient scripts for common experiments.
+* `src/`: Core training modules, models, and custom training logic.
+* `config/`: Hydra configurations for training and simulation pipelines.
+* `GameFormer-Planner/`: GameFormer-specific processing, training, and simulation.
+* `script/`: Utility scripts for common experiments and automation.
+* `cflow/`: Training implementation for **Flow Matching**.
+* `ade/`: Training code for **Uncertainty Estimation**.
+* `utils/`: Tools for analyzing simulation reports.
 
-## Getting Started
+---
 
-### 1) Prerequisites
+## 🚀 Getting Started
 
-- Python/Conda environment compatible with nuPlan devkit.
-- nuPlan devkit installed (tested with `v1.2.2`):  
-  [nuPlan installation guide](https://nuplan-devkit.readthedocs.io/en/latest/installation.html)
-- nuPlan dataset downloaded and prepared:  
-  [nuPlan dataset setup](https://nuplan-devkit.readthedocs.io/en/latest/dataset_setup.html)
+### 1. Prerequisites
+REDOUBT requires two separate Conda environments due to conflicting PyTorch versions between planners (e.g., Pluto, PlanScope) and Flow Matching modules.
 
-### 2) Installation
+#### **Environment A: Planners**
+Compatible with Pluto and PlanScope.
+```bash
+conda create -n planner python=3.9
+conda activate planner
+
+# Install nuplan-devkit
+git clone [https://github.com/motional/nuplan-devkit.git](https://github.com/motional/nuplan-devkit.git)
+cd nuplan-devkit
+pip install -e .
+pip install -r ./requirements.txt
+cd ..
+````
+
+#### **Environment B: Flow Matching**
 
 ```bash
-git clone https://github.com/sgNicola/Redoubt.git
-cd Redoubt
-conda activate nuplan
-pip install -r requirements.txt
+conda create -n flow python=3.9
+conda activate flow
+pip install -r ./flow_requirements.txt
 ```
 
-If your root workflow needs additional packages beyond the nuPlan environment, install them as needed.
+### 2\. Installation
 
-### 3) Environment Variables
+```bash
+git clone [https://github.com/sgNicola/Redoubt.git](https://github.com/sgNicola/Redoubt.git)
+cd Redoubt
+conda activate planner
+# Setup environment and install remaining dependencies
+sh ./script/setup_env.sh
+pip install -r ./requirements.txt
+```
 
-Set environment variables in your shell config (`~/.bashrc` as an example):
+> [\!IMPORTANT]
+> **Common Issue:** If you encounter nuPlan dataset setup problems, please refer to [nuplan-devkit issue \#379](https://github.com/motional/nuplan-devkit/issues/379).
+> **Advised NATTEN Version:** `0.14.6+torch1121cu116`
+
+### 3\. Environment Variables
+
+Add the following to your shell config (e.g., `~/.bashrc`):
 
 ```bash
 export NUPLAN_DATA_ROOT="/path/to/nuplan/dataset"
@@ -52,115 +75,124 @@ export NUPLAN_EXP_ROOT="$HOME/nuplan/exp"
 export PYTHONPATH="$PYTHONPATH:/path/to/Redoubt"
 ```
 
-Then reload:
+-----
+
+## 🛠️ Pipeline Workflow
+
+### Phase 1: Data Processing (Pluto Example)
 
 ```bash
-source ~/.bashrc
-```
-
-## Data Processing
-
-### Root pipeline preprocessing
-
-Use the `GameFormer-Planner` preprocessing script:
-### GameFormer cache example
-
-```bash
-cd GameFormer-Planner
-sh test_cache.sh
-```
-
-`test_cache.sh` calls `cache_process.py` with `config/scenario_filter/train_InD.yaml` and writes logs to `cache.log`.
-
-### Pluto cache example
-1. cache the training data
-```bash
-script/cache_train_pluto.sh
-```
-2. cache the val data and put the val data under the training dataset
-```bash
+# Cache training and validation data
+sh script/cache_train_pluto.sh
 sh script/cache_val_pluto.sh
+
+# Move val data under the training directory
 cd $NUPLAN_EXP_ROOT/pluto_val
 mv $NUPLAN_EXP_ROOT/pluto_val/* $NUPLAN_EXP_ROOT/pluto_train
 ```
 
-## Training
-1. make checkpoints files for saving the trained planner checkpoints.
-2. train planners:
+### Phase 2: Training Planners
+
 ```bash
+# Train the planner
 sh script/train_pluto.sh
-```
-3. rename the best saved planner checkpoints and move to your checkpoints files
-```bash
+
+# Organize checkpoints
 mkdir checkpoints
+# (Manual Action) Rename the best saved checkpoint and move it to ./checkpoints
 ```
-4. make folder for saving the pluto_dataset (latent features)
+
+### Phase 3: Latent Feature Extraction
+
 ```bash
 mkdir pluto_dataset
+
+# Run inference to generate latent features for train and val stages
+# For train:
+sh script/inference_train_pluto.sh # Ensure +stage='train' is set in script
+# For val:
+sh script/inference_train_pluto.sh # Ensure +stage='val' is set in script
 ```
 
-5. run inference scripts to get the latent features
-```bash
-#   +stage='train' 
-sh script/inference_train_pluto.sh
-```
-change the stage in script to 'val'
-```bash
-#   +stage='val' 
-sh script/inference_train_pluto.sh
-```
+### Phase 4: Simulation
 
-This script includes a short sanity run and a full training section. Please update GPU IDs and workspace paths in the script before launching.
+Modify `CHALLENGE` in `inference_sim_$planner$.sh` to select the type:
 
-## Simulation
+  * `closed_loop_nonreactive_agents`
+  * `closed_loop_reactive_agents`
+  * `open_loop_boxes`
 
-### Run pluto/scope/plantf simulation
+<!-- end list -->
 
-example:
 ```bash
 bash script/inference_sim_pluto.sh
 ```
-Folder where all simulation results are stored: $NUPLAN_EXP_ROOT/exp/exp/simulation/open_loop_boxes/scenario_group_0/inference_pluto_planner
- 
 
-Then we can see that in pluto_datase, we get three folders: simulation_results, train_results, val_results.
+Results will be stored in: `$NUPLAN_EXP_ROOT/exp/exp/simulation/...`
 
-Before simulation:
-- Put checkpoints under `checkpoints/` (or update `CKPT_ROOT` in script).
-- Ensure planner model settings used in simulation match those used during training.
-- 
-then we can see in the pluto_dataset. it contains 
+-----
 
-## Train flow matching model on the latent features
-change the path in train_cflow.sh
---data_dir /path/to/Redoubt/pluto_dataset --model_name pluto
-'''
-sh train_cflow.sh
-'''
-## Inference flow matching
-change the data_dir and checkpoint path in script/flow_inference.sh
+## 🌊 Flow Matching & Evaluation
+
+### 1\. Training Flow Matching
+
+Train on the latent features generated in Phase 3.
+
 ```bash
+conda activate flow
+# Update paths in train_cflow.sh: --data_dir /path/to/Redoubt/pluto_dataset
+sh train_cflow.sh
+```
+
+### 2\. Inference
+
+```bash
+# Update data_dir and checkpoint paths in script/flow_inference.sh
 sh script/flow_inference.sh
 ```
-## To Do
 
-- [ ] Improve documentation.
+### 3\. Safety Evaluation (OOD)
 
+Evaluate the planner based on the density files generated.
 
-## Acknowledgements
+```bash
+python evaluation_ood.py \
+  --planner pluto \
+  --benchmark closed_loop_nonreactive_agents \
+  --density-file pluto_dataset/prediction/log_density.parquet
+```
 
-Many thanks to the open-source community. Related projects:
-- [planTF](https://github.com/jchengai/planTF)
-- [GameFormer-Planner](https://github.com/MCZhi/GameFormer-Planner)
-- [Pluto](https://github.com/jchengai/pluto)
-- [PlanScope](https://github.com/Rex-sys-hk/PlanScope)
+-----
 
-## Contact
+## 📝 Roadmap
 
-If you have any questions or suggestions, please open an issue or contact:
-- shuguangwang6@gmail.com
+  - [ ] Improve documentation.
+  - [ ] Add support for more baseline planners.
 
-## Citation
+## 🤝 Acknowledgements
 
-If this repository is useful for your research, please consider giving it a star.
-The citation entry will be updated after publication details are finalized.
+This project stands on the shoulders of the open-source community:
+
+  * [planTF](https://www.google.com/search?q=https://github.com/nuPlan-ranking/planTF) | [GameFormer-Planner](https://www.google.com/search?q=https://github.com/ZhiyuHuang/GameFormer-Planner) | [Pluto](https://www.google.com/search?q=https://github.com/vueren/pluto) | [PlanScope](https://github.com/Rex-sys-hk/PlanScope)
+
+## 📧 Contact
+
+For questions or suggestions, please open an **Issue** or contact:
+**Shuguang Wang**: [shuguangwang6@gmail.com](mailto:shuguangwang6@gmail.com)
+
+## 🎓 Citation
+
+If you find this repository useful, please consider giving it a star ⭐ and citing our work:
+
+```bibtex
+@inproceedings{
+wang2025redoubt,
+title={{REDOUBT}: Duo Safety Validation for Autonomous Vehicle Motion Planning},
+author={Shuguang Wang and Qian Zhou and Kui Wu and Dapeng Wu and Wei-Bin Lee and Jianping Wang},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025},
+url={https://openreview.net/forum?id=lEsvczuPVj}
+}
+```
+
+ 

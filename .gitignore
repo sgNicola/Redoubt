@@ -33,3 +33,4 @@ testing_log/
 .ipynb_checkpoints
 pluto_dataset/
 *.ckpt
+FM_model/
