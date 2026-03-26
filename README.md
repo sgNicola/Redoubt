@@ -1,6 +1,3 @@
-以下是为您整理好的 Markdown 源码。您可以直接将其复制并保存为 `README.md` 文件：
-
-````markdown
 # REDOUBT: Duo Safety Validation for Autonomous Vehicle Motion Planning
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -39,7 +36,7 @@ cd nuplan-devkit
 pip install -e .
 pip install -r ./requirements.txt
 cd ..
-````
+
 
 #### **Environment B: Flow Matching**
 
