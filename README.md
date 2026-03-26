@@ -36,7 +36,7 @@ cd nuplan-devkit
 pip install -e .
 pip install -r ./requirements.txt
 cd ..
-
+```
 
 #### **Environment B: Flow Matching**
 
