@@ -2,33 +2,7 @@ _target_: nuplan.planning.scenario_builder.scenario_filter.ScenarioFilter
 _convert_: 'all'
 
 scenario_types:
-  - stationary
-  - near_pedestrian_on_crosswalk
-  - traversing_intersection
-  - on_traffic_light_intersection
-  - medium_magnitude_speed
-  - traversing_traffic_light_intersection
-  - high_magnitude_speed
-  - stationary_in_traffic
-  - near_pedestrian_at_pickup_dropoff
-  - stationary_at_traffic_light_without_lead
-  - near_long_vehicle
-  - low_magnitude_speed
-  - following_lane_without_lead
-  - stationary_at_traffic_light_with_lead
-  - on_all_way_stop_intersection
-  - near_high_speed_vehicle
-  - near_construction_zone_sign
-  - following_lane_with_slow_lead
-  - behind_long_vehicle
-  - starting_protected_noncross_turn
-  - near_pedestrian_on_crosswalk_with_ego
-  - near_multiple_pedestrians
-  - accelerating_at_traffic_light
-  - stopping_with_lead
-  - following_lane_with_lead
-  - stopping_at_traffic_light_without_lead 
-  - waiting_for_pedestrian_to_cross
+# The scenario types in the distribution.
 
 scenario_tokens: null               # List of scenario tokens to include
 
