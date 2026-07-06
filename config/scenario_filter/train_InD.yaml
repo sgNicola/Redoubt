@@ -2,7 +2,7 @@ _target_: nuplan.planning.scenario_builder.scenario_filter.ScenarioFilter
 _convert_: 'all'
 
 scenario_types:
-# The scenario types in the distribution.
+# The scenario types in the distribution. Select the High-frequency scenarios, also pay attention to mixed-tag scenarios.
 
 scenario_tokens: null               # List of scenario tokens to include
 
